@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Particles from "react-particles-js";
+import Form from "./components/Form/Form";
+import { initialReviews } from "./util/dummy";
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import Tachyons from "tachyons";
+
+const LOCAL_STORAGE_KEY = "nilaidosenku";
 
 const particlesOptions = {
   particles: {
@@ -26,36 +30,38 @@ const particlesOptions = {
   },
 };
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: "",
-      searchBox: "",
-      route: "signin",
-      isSignedIn: false,
-    };
+function App() {
+  const [reviews, setReviews] = useState(initialReviews);
+  useEffect(() => {
+    const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (storage) {
+      setReviews(storage);
+    }
+  }, []);
+
+  function addReview(review) {
+    setReviews([review, ...reviews]);
   }
 
-  onInputChange = (e) => {
-    this.setState({ input: e.target.value });
-  };
+  // onInputChange = (e) => {
+  //   this.setState({ input: e.target.value });
+  // };
 
-  onRouteChange = (route) => {
-    if (route === "signout") {
-      this.setState({ isSignedIn: false });
-    } else {
-      this.setState({ isSignedIn: true });
-    }
-    this.setState({ route: route });
-  };
+  // onRouteChange = (route) => {
+  //   if (route === "signout") {
+  //     this.setState({ isSignedIn: false });
+  //   } else {
+  //     this.setState({ isSignedIn: true });
+  //   }
+  //   this.setState({ route: route });
+  // };
 
-  render() {
-    const { isSignedIn, searchBox, route } = this.state;
-    return (
-      <div className="App">
-        <Particles className="particles" params={particlesOptions} />
-        <Navigation
+  return (
+    <div className="App">
+      <Particles className="particles" params={particlesOptions} />
+      <Form addReview={addReview} />
+      {/* <List reviews={reviews} /> */}
+      {/* <Navigation
           onInputChange={this.onInputChange}
           onRouteChange={this.onRouteChange}
           isSignedIn={isSignedIn}
@@ -68,10 +74,9 @@ class App extends Component {
           <Signin onRouteChange={this.onRouteChange} />
         ) : (
           <Register onRouteChange={this.onRouteChange} />
-        )}
-      </div>
-    );
-  }
+        )}  */}
+    </div>
+  );
 }
 
 export default App;
