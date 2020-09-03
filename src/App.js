@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Particles from "react-particles-js";
 import Form from "./components/Form/Form";
+import List from "./components/List/List";
 import { initialReviews } from "./util/dummy";
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import Tachyons from "tachyons";
-
-const LOCAL_STORAGE_KEY = "nilaidosenku";
 
 const particlesOptions = {
   particles: {
@@ -30,8 +29,11 @@ const particlesOptions = {
   },
 };
 
+const LOCAL_STORAGE_KEY = "nilaidosenku";
+
 function App() {
   const [reviews, setReviews] = useState(initialReviews);
+
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (storage) {
@@ -43,38 +45,11 @@ function App() {
     setReviews([review, ...reviews]);
   }
 
-  // onInputChange = (e) => {
-  //   this.setState({ input: e.target.value });
-  // };
-
-  // onRouteChange = (route) => {
-  //   if (route === "signout") {
-  //     this.setState({ isSignedIn: false });
-  //   } else {
-  //     this.setState({ isSignedIn: true });
-  //   }
-  //   this.setState({ route: route });
-  // };
-
   return (
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
       <Form addReview={addReview} />
-      {/* <List reviews={reviews} /> */}
-      {/* <Navigation
-          onInputChange={this.onInputChange}
-          onRouteChange={this.onRouteChange}
-          isSignedIn={isSignedIn}
-        />
-        {route === "home" ? (
-          <div>
-            <h1>You're in the page</h1>
-          </div>
-        ) : this.state.route === "signin" ? (
-          <Signin onRouteChange={this.onRouteChange} />
-        ) : (
-          <Register onRouteChange={this.onRouteChange} />
-        )}  */}
+      <List reviews={reviews} />
     </div>
   );
 }

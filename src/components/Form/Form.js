@@ -31,7 +31,7 @@ function Form({ addReview }) {
         name: "",
         university: "",
         reviews: "",
-        ratings: 1,
+        ratings: 0,
       });
       console.log("Submitted");
     }
