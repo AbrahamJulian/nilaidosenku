@@ -3,6 +3,7 @@ import "./App.css";
 import Particles from "react-particles-js";
 import Form from "./components/Form/Form";
 import List from "./components/List/List";
+import Modal from "./components/Modal/Modal";
 import { initialReviews } from "./util/dummy";
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
@@ -33,6 +34,14 @@ const LOCAL_STORAGE_KEY = "nilaidosenku";
 
 function App() {
   const [reviews, setReviews] = useState(initialReviews);
+  const [edit, setEdit] = useState(false);
+  const [currentReview, setCurrentReview] = useState({
+    id: "",
+    name: "",
+    university: "",
+    comments: [],
+    ratings: [],
+  });
 
   useEffect(() => {
     const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -41,15 +50,58 @@ function App() {
     }
   }, []);
 
-  function addReview(review) {
+  const addReview = (review) => {
+    const arr = [review.reviews];
+    review.reviews = arr;
     setReviews([review, ...reviews]);
-  }
+  };
+
+  const deleteReview = (id) => {
+    setReviews(reviews.filter((review) => review.id != id));
+  };
+
+  const handleUpdate = (value) => {
+    reviews.reviews.push(value);
+    setReviews(reviews, ...reviews);
+  };
+
+  const editReview = (review) => {
+    const { id, name, university, comments, ratings } = review;
+
+    setEdit(true);
+    setCurrentReview({
+      id: id,
+      name: name,
+      university: university,
+      comments: comments,
+      ratings: ratings,
+    });
+  };
+
+  const updateReview = (id, updatedReview) => {
+    setEdit(false);
+    setReviews(
+      reviews.map((review) => (review === review.id ? updatedReview : review))
+    );
+  };
 
   return (
     <div className="App">
-      <Particles className="particles" params={particlesOptions} />
-      <Form addReview={addReview} />
-      <List reviews={reviews} />
+      <header>
+        <p> Nilai Dosenku </p>
+      </header>
+      <main>
+        {edit ? (
+          <Modal currentReview={currentReview} update={updateReview} />
+        ) : null}
+        <Particles className="particles" params={particlesOptions} />
+        <Form addReview={addReview} />
+        <List
+          reviews={reviews}
+          deleteReview={deleteReview}
+          editReview={editReview}
+        />
+      </main>
     </div>
   );
 }
