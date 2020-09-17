@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 
 const Modal = ({ currentReview, updateReview }) => {
-  const [current, setCurrent] = useState(currentReview);
-  const { id, name, university, review, ratings } = current;
+  const [review, setReview] = useState(currentReview);
+  const { id, comments, ratings } = review;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setCurrent({
-      ...current,
+    setReview({
+      ...review,
       [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateReview(id, current);
+    updateReview(id, review);
   };
 
   return (
@@ -25,7 +24,7 @@ const Modal = ({ currentReview, updateReview }) => {
         <input
           name="ratings"
           type="text"
-          pattern="[0-5]"
+          pattern="[1-5]"
           min="1"
           max="5"
           value={ratings}
@@ -35,9 +34,9 @@ const Modal = ({ currentReview, updateReview }) => {
       <label>
         Comment:
         <input
-          name="comment"
+          name="comments"
           type="text"
-          value={review}
+          value={comments}
           onChange={handleInputChange}
         />
       </label>

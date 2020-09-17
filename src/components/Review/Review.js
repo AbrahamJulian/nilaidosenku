@@ -22,15 +22,18 @@ function Review({ review, deleteReview, editReview }) {
   };
 
   return (
-    <li className="flex flex-column pa1 ma2 ba bw1 pointer">
-      <div onClick={toggleClick}>
-        <p>{review.name}</p>
-        <p>{review.university}</p>
+    <li id={id}>
+      <div
+        onClick={toggleClick}
+        className="flex flex-column pa1 ma2 ba bw1 pointer"
+      >
+        <p>{name}</p>
+        <p>{university}</p>
         <p>{rate}</p>
         {open == true ? (
-          <div>
-            {review.comments.map((rev) => (
-              <ul>{rev}</ul>
+          <div id={id}>
+            {comments.map((rev, index) => (
+              <p key={index}>{rev}</p>
             ))}
             <button role="button" onClick={handleDelete}>
               Delete

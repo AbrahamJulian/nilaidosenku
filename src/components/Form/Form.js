@@ -6,7 +6,7 @@ function Form({ addReview }) {
   const [review, setReview] = useState({
     name: "",
     university: "",
-    reviews: "",
+    comments: "",
     ratings: 0,
   });
 
@@ -23,14 +23,14 @@ function Form({ addReview }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (review.name.trim() && review.reviews.trim()) {
+    if (review.name.trim() && review.comments.trim()) {
       addReview({ ...review, id: uuidv4 });
 
       setReview({
         ...review,
         name: "",
         university: "",
-        reviews: "",
+        comments: "",
         ratings: 0,
       });
       console.log("Submitted");
@@ -64,9 +64,9 @@ function Form({ addReview }) {
         <label>
           Dosen Review
           <input
-            name="reviews"
+            name="comments"
             type="text"
-            value={review.reviews}
+            value={review.comments}
             onChange={handleInputChange}
           />
         </label>

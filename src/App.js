@@ -51,8 +51,8 @@ function App() {
   }, []);
 
   const addReview = (review) => {
-    const arr = [review.reviews];
-    review.reviews = arr;
+    const arr = [review.comments];
+    review.comments = arr;
     setReviews([review, ...reviews]);
   };
 
@@ -60,28 +60,29 @@ function App() {
     setReviews(reviews.filter((review) => review.id != id));
   };
 
-  const handleUpdate = (value) => {
-    reviews.reviews.push(value);
-    setReviews(reviews, ...reviews);
-  };
-
   const editReview = (review) => {
-    const { id, name, university, comments, ratings } = review;
+    const { id, comments, ratings } = review;
 
     setEdit(true);
     setCurrentReview({
       id: id,
-      name: name,
-      university: university,
-      comments: comments,
-      ratings: ratings,
+      comments: "",
+      ratings: 0,
     });
   };
 
   const updateReview = (id, updatedReview) => {
     setEdit(false);
     setReviews(
-      reviews.map((review) => (review === review.id ? updatedReview : review))
+      reviews.map((review) =>
+        review.id === id
+          ? (review.ratings.push(parseInt(updatedReview.ratings)),
+            review.comments.push(updatedReview.comments),
+            console.log(review.ratings),
+            console.log(review.id),
+            review)
+          : review
+      )
     );
   };
 
@@ -92,7 +93,7 @@ function App() {
       </header>
       <main>
         {edit ? (
-          <Modal currentReview={currentReview} update={updateReview} />
+          <Modal currentReview={currentReview} updateReview={updateReview} />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
         <Form addReview={addReview} />
