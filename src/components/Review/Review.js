@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Button, Card, Accordion } from "react-bootstrap";
+import "./Review.css";
 
 function Review({ review, deleteReview, editReview }) {
   const { id, name, university, comments, ratings } = review;
@@ -10,6 +12,7 @@ function Review({ review, deleteReview, editReview }) {
     rate += review.ratings[i];
   }
   rate = rate / commentsLength;
+  rate = rate.toFixed(1);
 
   const toggleClick = () => setOpen(!open);
 
@@ -23,29 +26,34 @@ function Review({ review, deleteReview, editReview }) {
 
   return (
     <li id={id}>
-      <div
-        onClick={toggleClick}
-        className="flex flex-column pa1 ma2 ba bw1 pointer"
-      >
-        <p>{name}</p>
-        <p>{university}</p>
-        <p>{rate}</p>
-        {open == true ? (
-          <div id={id}>
-            {comments.map((rev, index) => (
-              <p key={index}>{rev}</p>
-            ))}
-            <button role="button" onClick={handleDelete}>
-              Delete
-            </button>
-            <button role="button" onClick={handleEdit}>
-              Edit
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+      <Accordion defaultActiveKey="0">
+        <Card class="card" type="button">
+          <Card.Header>
+            <Accordion.Toggle as={Button} variant="text" eventKey="1">
+              <Card.Title style={{ height: "2em" }}>{name}</Card.Title>
+              <Card.Subtitle>
+                <p>{university}</p>
+                <p>{rate}</p>
+              </Card.Subtitle>
+            </Accordion.Toggle>
+          </Card.Header>
+          <Accordion.Collapse eventKey="1">
+            <Card.Body>
+              <div id={id}>
+                {comments.map((rev, index) => (
+                  <p key={index}>{rev}</p>
+                ))}
+                <Button variant="warning" onClick={handleDelete}>
+                  Delete
+                </Button>{" "}
+                <Button variant="primary" onClick={handleEdit}>
+                  Edit
+                </Button>
+              </div>
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
     </li>
   );
 }

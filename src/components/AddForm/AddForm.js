@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import DropdownList from "react-widgets/lib/DropdownList";
+import { Form, Row, Col } from "react-bootstrap";
 
-function Form({ addReview }) {
+function AddForm({ addReview }) {
   const [review, setReview] = useState({
     name: "",
     university: "",
     comments: "",
-    ratings: 0,
+    ratings: [],
   });
 
   function handleInputChange(e) {
@@ -28,6 +29,7 @@ function Form({ addReview }) {
 
       setReview({
         ...review,
+        id: "",
         name: "",
         university: "",
         comments: "",
@@ -88,4 +90,4 @@ function Form({ addReview }) {
   );
 }
 
-export default Form;
+export default AddForm;

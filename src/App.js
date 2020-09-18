@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Particles from "react-particles-js";
-import Form from "./components/Form/Form";
+import AddForm from "./components/AddForm/AddForm";
 import List from "./components/List/List";
 import Modal from "./components/Modal/Modal";
 import { initialReviews } from "./util/dummy";
-import Navigation from "./components/Navigation/Navigation";
-import Signin from "./components/Signin/Signin";
-import Register from "./components/Register/Register";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Tachyons from "tachyons";
 
 const particlesOptions = {
@@ -51,8 +49,10 @@ function App() {
   }, []);
 
   const addReview = (review) => {
-    const arr = [review.comments];
-    review.comments = arr;
+    const tempComments = [review.comments];
+    const tempRatings = [parseInt(review.ratings)];
+    review.comments = tempComments;
+    review.ratings = tempRatings;
     setReviews([review, ...reviews]);
   };
 
@@ -79,7 +79,6 @@ function App() {
           ? (review.ratings.push(parseInt(updatedReview.ratings)),
             review.comments.push(updatedReview.comments),
             console.log(review.ratings),
-            console.log(review.id),
             review)
           : review
       )
@@ -96,7 +95,7 @@ function App() {
           <Modal currentReview={currentReview} updateReview={updateReview} />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
-        <Form addReview={addReview} />
+        <AddForm addReview={addReview} />
         <List
           reviews={reviews}
           deleteReview={deleteReview}
