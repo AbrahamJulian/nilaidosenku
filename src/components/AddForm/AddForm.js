@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import DropdownList from "react-widgets/lib/DropdownList";
-import { Form, Row, Col } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
-function AddForm({ addReview }) {
+function AddForm({ addReview, searchUniv }) {
   const [review, setReview] = useState({
+    id: "",
     name: "",
-    university: "",
+    university: "CSU Northridge",
     comments: "",
     ratings: [],
   });
@@ -25,15 +25,15 @@ function AddForm({ addReview }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (review.name.trim() && review.comments.trim()) {
-      addReview({ ...review, id: uuidv4 });
+      addReview({ ...review, id: uuidv4() });
 
       setReview({
         ...review,
         id: "",
         name: "",
-        university: "",
+        university: "CSU Northridge",
         comments: "",
-        ratings: 0,
+        ratings: 1,
       });
       console.log("Submitted");
     }
@@ -41,51 +41,87 @@ function AddForm({ addReview }) {
 
   return (
     <div className="form">
-      <h3>Review Form</h3>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Dosen name:
-          <input
-            name="name"
-            type="text"
-            value={review.name}
-            onChange={handleInputChange}
-          />
-        </label>
-        <label>
-          Select university:
-          <select
-            value={review.university}
-            onInput={handleChange.bind(review.university)}
-            onChange={handleChange}
+      <Card
+        border="noBorderRadius"
+        className="card mb-1"
+        style={{
+          borderRadius: "7px",
+          width: "32rem",
+          margin: "0 auto",
+          float: "none",
+        }}
+      >
+        <Card.Header style={{ textAlign: "left" }}>
+          <Card.Title
+            style={{
+              margin: "10px 0",
+              paddingBottom: "15px",
+              height: "auto",
+            }}
           >
-            <option value="UGM">UGM</option>
-            <option value="UKDW">UKDW</option>
-          </select>
-        </label>
-        <label>
-          Dosen Review
-          <input
+            <input
+              name="name"
+              type="text"
+              value={review.name}
+              onChange={handleInputChange}
+              className="form-control"
+              placeholder="Professor's Name"
+              aria-label="Professor's Name"
+            />
+          </Card.Title>
+          <Card.Subtitle>
+            <select
+              name="university"
+              type="text"
+              value={review.university}
+              onInput={handleChange.bind(review.university)}
+              onChange={handleChange}
+              className="custom-select"
+              aria-label="Universities Option"
+            >
+              <option value="CSU Northridge">CSU Northridge</option>
+              <option value="Foothill College">Foothill College</option>
+            </select>
+            {/* <select
+              value={review.university}
+              onInput={handleChange.bind(review.university)}
+              onChange={handleChange}
+            >
+              <option value="CSU Northridge">CSUN</option>
+              <option value="Foothill College">Foothill College</option>
+            </select> */}
+            <input
+              name="ratings"
+              type="text"
+              pattern="[0-5]"
+              min="1"
+              max="5"
+              value={review.ratings}
+              onChange={handleInputChange}
+              className="form-control input-group-sm"
+              placeholder="Ratings (1-5)"
+              aria-label="Ratings"
+            />
+          </Card.Subtitle>
+        </Card.Header>
+        <Card.Body>
+          <textarea
             name="comments"
             type="text"
             value={review.comments}
             onChange={handleInputChange}
-          />
-        </label>
-        <label>
-          Ratings
-          <input
-            name="ratings"
-            type="text"
-            pattern="[0-5]"
-            min="1"
-            max="5"
-            value={review.ratings}
-            onChange={handleInputChange}
-          />
-        </label>
-        <button type="submit">Add Review</button>
-      </form>
+            className="form-control"
+            placeholder="Write your review here..."
+            aria-label="Review Comments"
+          ></textarea>
+
+          <div className="buttons mt-3">
+            <Button className="button" variant="primary" onClick={handleSubmit}>
+              Add Review
+            </Button>{" "}
+          </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

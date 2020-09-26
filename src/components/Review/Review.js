@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Button, Card, Accordion } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./Review.css";
 
 function Review({ review, deleteReview, editReview }) {
   const { id, name, university, comments, ratings } = review;
-  const [open, setOpen] = useState(false);
+  const trashIcon = <FontAwesomeIcon icon={faTrash} />;
+  const plusIcon = <FontAwesomeIcon icon={faPlus} />;
 
   const commentsLength = review.comments.length;
   let rate = 0;
@@ -13,8 +16,6 @@ function Review({ review, deleteReview, editReview }) {
   }
   rate = rate / commentsLength;
   rate = rate.toFixed(1);
-
-  const toggleClick = () => setOpen(!open);
 
   const handleDelete = () => {
     deleteReview(id);
@@ -26,34 +27,42 @@ function Review({ review, deleteReview, editReview }) {
 
   return (
     <li id={id}>
-      <Accordion defaultActiveKey="0">
-        <Card class="card" type="button">
-          <Card.Header>
-            <Accordion.Toggle as={Button} variant="text" eventKey="1">
-              <Card.Title style={{ height: "2em" }}>{name}</Card.Title>
-              <Card.Subtitle>
-                <p>{university}</p>
-                <p>{rate}</p>
-              </Card.Subtitle>
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="1">
-            <Card.Body>
-              <div id={id}>
-                {comments.map((rev, index) => (
-                  <p key={index}>{rev}</p>
-                ))}
-                <Button variant="warning" onClick={handleDelete}>
-                  Delete
-                </Button>{" "}
-                <Button variant="primary" onClick={handleEdit}>
-                  Edit
-                </Button>
-              </div>
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
+      <Card
+        border="noBorderRadius"
+        className="card  mb-1"
+        style={{ borderRadius: "7px", width: "16rem" }}
+      >
+        <Card.Header style={{ textAlign: "left" }}>
+          <Card.Title
+            style={{ margin: "10px 0", paddingBottom: "15px", height: "auto" }}
+          >
+            {name}
+          </Card.Title>
+          <Card.Subtitle>
+            <h6>{university}</h6>
+            <h6>{rate}</h6>
+          </Card.Subtitle>
+        </Card.Header>
+        <Card.Body>
+          <div>
+            {comments.map((rev, index) => (
+              <p key={index}>{rev}</p>
+            ))}
+            <div className="buttons">
+              <Button className="button" variant="primary" onClick={handleEdit}>
+                {plusIcon}
+              </Button>{" "}
+              <Button
+                className="button"
+                variant="warning"
+                onClick={handleDelete}
+              >
+                {trashIcon}
+              </Button>
+            </div>
+          </div>
+        </Card.Body>
+      </Card>
     </li>
   );
 }

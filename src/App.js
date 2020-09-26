@@ -22,7 +22,7 @@ const particlesOptions = {
       value: 100,
       density: {
         enable: true,
-        value_area: 800,
+        value_area: 2000,
       },
     },
   },
@@ -33,6 +33,11 @@ const LOCAL_STORAGE_KEY = "nilaidosenku";
 function App() {
   const [reviews, setReviews] = useState(initialReviews);
   const [edit, setEdit] = useState(false);
+  const [call, setCall] = useState({
+    search: "",
+    display: "",
+    univList: [],
+  });
   const [currentReview, setCurrentReview] = useState({
     id: "",
     name: "",
@@ -42,11 +47,45 @@ function App() {
   });
 
   useEffect(() => {
+    fetch(`http://universities.hipolabs.com/search?name=California`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        let univFromApi = data.map((univ) => {
+          return { value: univ.name };
+        });
+        call.univList = univFromApi;
+        console.log("success");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
     const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (storage) {
       setReviews(storage);
     }
   }, []);
+
+  const univSearchUpdate = (search) => {
+    fetch(`http://universities.hipolabs.com/search?name=${search}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        let univFromApi = data.map((univ) => {
+          return { value: univ.name };
+        });
+        call.univList = univFromApi;
+        console.log("success");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const addReview = (review) => {
     const tempComments = [review.comments];
@@ -88,14 +127,14 @@ function App() {
   return (
     <div className="App">
       <header>
-        <p> Nilai Dosenku </p>
+        <p> Review My Professor </p>
       </header>
       <main>
         {edit ? (
           <Modal currentReview={currentReview} updateReview={updateReview} />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
-        <AddForm addReview={addReview} />
+        <AddForm addReview={addReview} searchUniv={univSearchUpdate} />
         <List
           reviews={reviews}
           deleteReview={deleteReview}

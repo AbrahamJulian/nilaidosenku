@@ -1,13 +1,14 @@
 import React from "react";
 import Review from "../Review/Review";
 import { XMasonry, XBlock } from "react-xmasonry";
+import "./List.css";
 
 function List({ reviews, deleteReview, editReview }) {
   return (
-    <XMasonry>
+    <XMasonry maxColumns="4" responsive="true">
       {reviews.length
         ? reviews.map((review) => (
-            <XBlock key={review.id}>
+            <XBlock width={1} className="card" key={review.id}>
               <Review
                 review={review}
                 deleteReview={deleteReview}

@@ -1,3 +1,39 @@
+*:focus {
+  outline: none !important;
+  border: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+li {
+  list-style-type: none;
+}
+
 .card {
-  transition: height 0.3s;
+  border: 1px solid lightgrey;
+  margin: 10px 60px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.card:hover .buttons {
+  opacity: 1;
+  transition: all 0.4s ease-in-out;
+}
+
+.buttons {
+  opacity: 0;
+}
+
+.no-borderRadius {
+  border-radius: 0px !important;
 }
