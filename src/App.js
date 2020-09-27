@@ -71,17 +71,18 @@ function App() {
   }, []);
 
   const univSearchUpdate = (search) => {
-    fetch(`http://universities.hipolabs.com/search?name=${search}`)
+    fetch(`http://universities.hipolabs.com/search?name=${call.search}`)
       .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let univFromApi = data.map((univ) => {
-          return { value: univ.name };
-        });
-        call.univList = univFromApi;
+        console.log(response);
         console.log("success");
       })
+      // .then((data) => {
+      //   let univFromApi = data.map((univ) => {
+      //     return { value: univ.name };
+      //   });
+      //   call.univList = univFromApi;
+      //   console.log("success");
+      // })
       .catch((error) => {
         console.log(error);
       });
@@ -127,14 +128,24 @@ function App() {
   return (
     <div className="App">
       <header>
-        <p> Review My Professor </p>
+        <p>
+          {" "}
+          Review <span styling={{ textDecoration: "line-through" }}>
+            Rate
+          </span>{" "}
+          My Professor{" "}
+        </p>
       </header>
       <main>
         {edit ? (
           <Modal currentReview={currentReview} updateReview={updateReview} />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
-        <AddForm addReview={addReview} searchUniv={univSearchUpdate} />
+        <AddForm
+          addReview={addReview}
+          searchUniv={univSearchUpdate}
+          univList={call.univList}
+        />
         <List
           reviews={reviews}
           deleteReview={deleteReview}
