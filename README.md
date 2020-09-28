@@ -4,6 +4,6 @@ A simple app that gives review for professors. Built based on Rate My Professor.
 
 - To-do:
   - ~~Card-based styling~~
-  - Take university list api from hipolabs
-  - Create instagram like animation on hover
+  - Take university list api from hipolabs (In Progress)
+  - Create instagram like animation on hover on the review cards
   - Create back-end

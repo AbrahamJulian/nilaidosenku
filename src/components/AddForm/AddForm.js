@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Button, Card } from "react-bootstrap";
 import { Dropdown } from "semantic-ui-react";
+import "./AddForm.css";
 
 function AddForm({ addReview, searchUniv, univList }) {
   const [review, setReview] = useState({
     id: "",
     name: "",
-    university: "CSU Northridge",
+    university: "",
     comments: "",
     ratings: [],
   });
@@ -32,7 +33,7 @@ function AddForm({ addReview, searchUniv, univList }) {
         ...review,
         id: "",
         name: "",
-        university: "CSU Northridge",
+        university: "",
         comments: "",
         ratings: 1,
       });
@@ -80,6 +81,9 @@ function AddForm({ addReview, searchUniv, univList }) {
               className="custom-select"
               aria-label="Universities Option"
             >
+              <option value="" defaultValue disabled>
+                Pick a university...
+              </option>
               <option value="CSU Northridge">CSU Northridge</option>
               <option value="Foothill College">Foothill College</option>
             </select>
@@ -117,8 +121,8 @@ function AddForm({ addReview, searchUniv, univList }) {
           ></textarea>
 
           <div className="buttons mt-3">
-            <Button className="button" variant="primary" onClick={handleSubmit}>
-              Add Review
+            <Button className="button" variant="success" onClick={handleSubmit}>
+              Add Professor
             </Button>{" "}
           </div>
         </Card.Body>

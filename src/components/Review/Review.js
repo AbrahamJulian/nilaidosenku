@@ -54,7 +54,7 @@ function Review({ review, deleteReview, editReview }) {
               </Button>{" "}
               <Button
                 className="button"
-                variant="warning"
+                variant="danger"
                 onClick={handleDelete}
               >
                 {trashIcon}

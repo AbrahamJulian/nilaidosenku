@@ -101,14 +101,20 @@ function App() {
   };
 
   const editReview = (review) => {
-    const { id, comments, ratings } = review;
+    const { id, name, university, comments, ratings } = review;
 
     setEdit(true);
     setCurrentReview({
       id: id,
+      name: name,
+      university: university,
       comments: "",
       ratings: 0,
     });
+  };
+
+  const cancelEdit = () => {
+    setEdit(false);
   };
 
   const updateReview = (id, updatedReview) => {
@@ -130,15 +136,16 @@ function App() {
       <header>
         <p>
           {" "}
-          Review <span styling={{ textDecoration: "line-through" }}>
-            Rate
-          </span>{" "}
-          My Professor{" "}
+          Review <del>Rate</del> My Professor{" "}
         </p>
       </header>
       <main>
         {edit ? (
-          <Modal currentReview={currentReview} updateReview={updateReview} />
+          <Modal
+            currentReview={currentReview}
+            updateReview={updateReview}
+            cancelEdit={cancelEdit}
+          />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
         <AddForm
