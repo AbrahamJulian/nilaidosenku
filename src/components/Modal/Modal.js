@@ -55,7 +55,7 @@ const Modal = ({ currentReview, updateReview, cancelEdit }) => {
           <h6>{currentReview.university}</h6>
           <input
             name="ratings"
-            type="input"
+            type="text"
             pattern="[0-5]"
             min="1"
             max="5"
