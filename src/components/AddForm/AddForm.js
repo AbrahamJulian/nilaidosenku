@@ -28,15 +28,15 @@ function AddForm({ addReview, searchUniv, univList }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (review.ratings == "") {
-      review.ratings = 1;
-    }
-
-    if (review.university == "") {
-      review.university = "Others";
-    }
-
     if (review.name.trim() && review.comments.trim()) {
+      if (review.ratings == "") {
+        review.ratings = 1;
+      }
+
+      if (review.university == "") {
+        review.university = "Others";
+      }
+
       addReview({ ...review, id: uuidv4() });
 
       setReview({
@@ -45,7 +45,7 @@ function AddForm({ addReview, searchUniv, univList }) {
         name: "",
         university: "",
         comments: "",
-        ratings: 1,
+        ratings: "",
       });
       console.log("Submitted");
     }
