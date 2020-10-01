@@ -47,7 +47,7 @@ export const initialReviews = [
     id: 5,
     name: "Timothy King",
     university: "Foothill College",
-    comments: ["BEST PROFESSOR EVER!!!", "Dude is on NatGeo, sike"],
+    comments: ["BEST PROFESSOR EVER!!!", "Dude is on NatGeo"],
     ratings: [5, 5],
   },
   {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Button, Card } from "react-bootstrap";
+import { univData } from "../../util/us_institutions";
 import { Dropdown } from "semantic-ui-react";
 import "./AddForm.css";
 
@@ -10,7 +11,7 @@ function AddForm({ addReview, searchUniv, univList }) {
     name: "",
     university: "",
     comments: "",
-    ratings: [],
+    ratings: "",
   });
 
   function handleInputChange(e) {
@@ -26,6 +27,15 @@ function AddForm({ addReview, searchUniv, univList }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (review.ratings == "") {
+      review.ratings = 1;
+    }
+
+    if (review.university == "") {
+      review.university = "Others";
+    }
+
     if (review.name.trim() && review.comments.trim()) {
       addReview({ ...review, id: uuidv4() });
 
@@ -84,8 +94,12 @@ function AddForm({ addReview, searchUniv, univList }) {
               <option value="" defaultValue disabled>
                 Pick a university...
               </option>
-              <option value="CSU Northridge">CSU Northridge</option>
-              <option value="Foothill College">Foothill College</option>
+              {univData.map((univ, index) => (
+                <option key={index} value={univ}>
+                  {univ.institution}
+                </option>
+              ))}
+              <option value="others">Others</option>
             </select>
             {/* <select
               value={review.university}

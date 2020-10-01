@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import Particles from "react-particles-js";
+import Helmet from "react-helmet";
 import AddForm from "./components/AddForm/AddForm";
 import List from "./components/List/List";
 import Modal from "./components/Modal/Modal";
 import { initialReviews } from "./util/dummy";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import Tachyons from "tachyons";
 
 const particlesOptions = {
@@ -33,11 +34,6 @@ const LOCAL_STORAGE_KEY = "nilaidosenku";
 function App() {
   const [reviews, setReviews] = useState(initialReviews);
   const [edit, setEdit] = useState(false);
-  const [call, setCall] = useState({
-    search: "",
-    display: "",
-    univList: [],
-  });
   const [currentReview, setCurrentReview] = useState({
     id: "",
     name: "",
@@ -47,46 +43,11 @@ function App() {
   });
 
   useEffect(() => {
-    fetch(`http://universities.hipolabs.com/search?name=California`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let univFromApi = data.map((univ) => {
-          return { value: univ.name };
-        });
-        call.univList = univFromApi;
-        console.log("success");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
     const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (storage) {
       setReviews(storage);
     }
   }, []);
-
-  const univSearchUpdate = (search) => {
-    fetch(`http://universities.hipolabs.com/search?name=${call.search}`)
-      .then((response) => {
-        console.log(response);
-        console.log("success");
-      })
-      // .then((data) => {
-      //   let univFromApi = data.map((univ) => {
-      //     return { value: univ.name };
-      //   });
-      //   call.univList = univFromApi;
-      //   console.log("success");
-      // })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const addReview = (review) => {
     const tempComments = [review.comments];
@@ -133,10 +94,13 @@ function App() {
 
   return (
     <div className="App">
+      <Helmet>
+        <title>Review My Professor</title>
+      </Helmet>
       <header>
-        <p>
+        <p id="title">
           {" "}
-          Review <del>Rate</del> My Professor{" "}
+          <del>Rate</del> Review My Professor{" "}
         </p>
       </header>
       <main>
@@ -148,11 +112,7 @@ function App() {
           />
         ) : null}
         <Particles className="particles" params={particlesOptions} />
-        <AddForm
-          addReview={addReview}
-          searchUniv={univSearchUpdate}
-          univList={call.univList}
-        />
+        <AddForm addReview={addReview} />
         <List
           reviews={reviews}
           deleteReview={deleteReview}
