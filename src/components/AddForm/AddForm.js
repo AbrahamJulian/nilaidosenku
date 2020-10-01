@@ -95,11 +95,11 @@ function AddForm({ addReview, searchUniv, univList }) {
                 Pick a university...
               </option>
               {univData.map((univ, index) => (
-                <option key={index} value={univ}>
+                <option key={index} value={univ.institution}>
                   {univ.institution}
                 </option>
               ))}
-              <option value="others">Others</option>
+              <option value="Others">Others</option>
             </select>
             {/* <select
               value={review.university}
@@ -111,7 +111,7 @@ function AddForm({ addReview, searchUniv, univList }) {
             </select> */}
             <input
               name="ratings"
-              type="text"
+              type="number"
               pattern="[0-5]"
               min="1"
               max="5"
