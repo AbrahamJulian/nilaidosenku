@@ -27,10 +27,14 @@ function AddForm({ addReview, searchUniv, univList }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     if (review.name.trim() && review.comments.trim()) {
+      review.ratings = parseInt(Math.abs(review.ratings));
+
       if (review.ratings == "") {
         review.ratings = 1;
+      }
+      if (review.ratings > 5) {
+        review.ratings = 5;
       }
 
       if (review.university == "") {
@@ -101,14 +105,7 @@ function AddForm({ addReview, searchUniv, univList }) {
               ))}
               <option value="Others">Others</option>
             </select>
-            {/* <select
-              value={review.university}
-              onInput={handleChange.bind(review.university)}
-              onChange={handleChange}
-            >
-              <option value="CSU Northridge">CSUN</option>
-              <option value="Foothill College">Foothill College</option>
-            </select> */}
+
             <input
               name="ratings"
               type="number"

@@ -18,12 +18,15 @@ const Modal = ({ currentReview, updateReview, cancelEdit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (review.comments.trim() && review.ratings.trim()) {
+      review.ratings = parseInt(Math.abs(review.ratings));
+      if (review.ratings > 5) {
+        review.ratings = 5;
+      }
       updateReview(id, review);
     }
   };
 
-  const handleCancel = (e) => {
-    edit = false;
+  const handleCancel = () => {
     cancelEdit();
   };
 
@@ -55,7 +58,7 @@ const Modal = ({ currentReview, updateReview, cancelEdit }) => {
           <h6>{currentReview.university}</h6>
           <input
             name="ratings"
-            type="text"
+            type="number"
             pattern="[0-5]"
             min="1"
             max="5"
