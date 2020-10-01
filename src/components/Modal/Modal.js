@@ -17,10 +17,7 @@ const Modal = ({ currentReview, updateReview, cancelEdit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (review.comments.trim()) {
-      if (review.ratings == "") {
-        review.ratings = 1;
-      }
+    if (review.comments.trim() && review.ratings.trim()) {
       updateReview(id, review);
     }
   };
