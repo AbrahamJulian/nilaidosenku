@@ -70,7 +70,7 @@ function App() {
       name: name,
       university: university,
       comments: "",
-      ratings: 0,
+      ratings: "",
     });
   };
 

@@ -17,7 +17,12 @@ const Modal = ({ currentReview, updateReview, cancelEdit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateReview(id, review);
+    if (review.comments.trim()) {
+      if (review.ratings == "") {
+        review.ratings = 1;
+      }
+      updateReview(id, review);
+    }
   };
 
   const handleCancel = (e) => {
