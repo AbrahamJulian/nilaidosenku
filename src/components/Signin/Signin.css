@@ -1,0 +1,14 @@
+input:hover,
+input:active,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+select:focus,
+.btn:active,
+.btn.active {
+  border: 1px solid black !important;
+  -webkit-appearance: none;
+  box-shadow: none !important;
+}
