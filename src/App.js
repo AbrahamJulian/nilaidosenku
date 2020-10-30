@@ -51,33 +51,72 @@ function App() {
     admin: false,
   });
   const [route, setRoute] = useState("home");
-  const [isLoaded, setLoaded] = useState(false);
+
+  // < -------------- BACK END METHOD ---------------- >
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios("http://localhost:3000/home");
-      console.log(result);
-      setReviews(result.data);
-      setLoaded(true);
-      console.log(reviews);
-    };
-
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (storage) {
-      setReviews(storage);
-    }
-  }, []);
+  const fetchData = async () => {
+    const result = await axios("http://localhost:3000/home");
+    console.log(result);
+    setReviews(result.data);
+    console.log(reviews);
+  };
+
+  const putReview = (review) => {
+    axios
+      .put("http://localhost:3000/updatereview", {
+        id: review.id,
+        name: review.name,
+        university: review.university,
+        comments: review.comments,
+        ratings: review.ratings,
+      })
+      .then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  };
+
+  const postReview = (review) => {
+    axios
+      .post("http://localhost:3000/addprofessor", {
+        id: review.id,
+        name: review.name,
+        university: review.university,
+        comments: review.comments,
+        ratings: review.ratings,
+      })
+      .then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    fetchData();
+  };
+  // useEffect(() => {
+  //   const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+  //   if (storage) {
+  //     setReviews(storage);
+  //   }
+  // }, []);
 
   const addReview = (review) => {
     const tempComments = [review.comments];
     const tempRatings = [parseInt(review.ratings)];
     review.comments = tempComments;
     review.ratings = tempRatings;
-    setReviews([review, ...reviews]);
+    // setReviews([review, ...reviews]);
+    postReview(review);
   };
 
   const deleteReview = (id) => {
