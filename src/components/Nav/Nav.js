@@ -1,18 +1,15 @@
 import React from "react";
 import Nav from "react-bootstrap/Nav";
 
-function Navbar({ onRouteChange }) {
+function Navbar({ user, onRouteChange }) {
   return (
     <>
-      <Nav className="justify-content-center" activeKey="/home">
+      <Nav className="justify-content-center">
         <Nav.Item>
-          <Nav.Link href="/home">Active</Nav.Link>
+          <Nav.Link onClick={() => onRouteChange("pending")}>Pending</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-1">Link</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link-2">Link</Nav.Link>
+          <Nav.Link onClick={() => onRouteChange("home")}>Home</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="disabled" disabled>

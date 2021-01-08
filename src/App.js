@@ -4,7 +4,9 @@ import Helmet from "react-helmet";
 import AddForm from "./components/AddForm/AddForm";
 import Navbar from "./components/Nav/Nav";
 import List from "./components/List/List";
+import PendingList from "./components/PendingList/PendingList";
 import Modal from "./components/Modal/Modal";
+import Pending from "./components/Pending/Pending";
 import Signin from "./components/Signin/Signin";
 import axios from "axios";
 import { initialReviews } from "./util/dummy";
@@ -32,10 +34,9 @@ const particlesOptions = {
   },
 };
 
-const LOCAL_STORAGE_KEY = "nilaidosenku";
-
 function App() {
   const [reviews, setReviews] = useState([]);
+  const [pendings, setPendings] = useState([]);
   const [edit, setEdit] = useState(false);
   const [currentReview, setCurrentReview] = useState({
     id: "",
@@ -48,29 +49,32 @@ function App() {
     id: null,
     name: "",
     email: "",
-    admin: false,
+    isAdmin: true,
   });
   const [route, setRoute] = useState("home");
 
-  // < -------------- BACK END METHOD ---------------- >
+  // < -------------- BACK END FUNCTION ---------------- >
 
+  // get initial data
   useEffect(() => {
     fetchData();
   }, []);
 
+  // fetch data
   const fetchData = async () => {
     const result = await axios("http://localhost:3000/home");
+    const res = await axios("http://localhost:3000/pending");
     console.log(result);
+    setPendings(res.data);
     setReviews(result.data);
     console.log(reviews);
   };
 
+  // update review after edit
   const putReview = (review) => {
     axios
       .put("http://localhost:3000/updatereview", {
         id: review.id,
-        name: review.name,
-        university: review.university,
         comments: review.comments,
         ratings: review.ratings,
       })
@@ -82,8 +86,10 @@ function App() {
           console.log(err);
         }
       );
+    fetchData();
   };
 
+  // send new professor to backend
   const postReview = (review) => {
     axios
       .post("http://localhost:3000/addprofessor", {
@@ -103,24 +109,53 @@ function App() {
       );
     fetchData();
   };
-  // useEffect(() => {
-  //   const storage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-  //   if (storage) {
-  //     setReviews(storage);
-  //   }
-  // }, []);
+
+  const deleteReview = (review) => {
+    axios
+      .get("http://localhost:3000/deleteprofessor/:id", {
+        id: review.id,
+      })
+      .then(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    fetchData();
+  };
+
+  const approvePending = (pending) => {
+    postReview(pending);
+    deletePending(pending);
+  };
+
+  const deletePending = (pending) => {
+    axios.get(`http://localhost:3000/deletePending/${pending.id}`, {}).then(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    fetchData();
+  };
+
+  // --------------------------------------------------------------------------
 
   const addReview = (review) => {
     const tempComments = [review.comments];
     const tempRatings = [parseInt(review.ratings)];
     review.comments = tempComments;
     review.ratings = tempRatings;
-    // setReviews([review, ...reviews]);
-    postReview(review);
+    setPendings([review, ...pendings]);
   };
 
-  const deleteReview = (id) => {
-    setReviews(reviews.filter((review) => review.id != id));
+  const removeReview = (review) => {
+    setReviews(reviews.filter((rev) => rev.id != review.id));
+    deleteReview(review);
   };
 
   const onRouteChange = (route) => {
@@ -145,16 +180,8 @@ function App() {
   };
   const updateReview = (id, updatedReview) => {
     setEdit(false);
-    setReviews(
-      reviews.map((review) =>
-        review.id === id
-          ? (review.ratings.push(parseInt(updatedReview.ratings)),
-            review.comments.push(updatedReview.comments),
-            console.log(review.ratings),
-            review)
-          : review
-      )
-    );
+    putReview(updatedReview);
+    fetchData();
   };
 
   return (
@@ -184,12 +211,18 @@ function App() {
             <AddForm addReview={addReview} />
             <List
               reviews={reviews}
-              deleteReview={deleteReview}
+              removeReview={removeReview}
               editReview={editReview}
             />
           </div>
         ) : (
-          <Signin onRouteChange={onRouteChange} />
+          <div>
+            <PendingList
+              pendings={pendings}
+              approvePending={approvePending}
+              deletePending={deletePending}
+            />
+          </div>
         )}
       </main>
     </div>
