@@ -4,7 +4,7 @@ function Pending({ pending, approvePending, deletePending }) {
   const { id, name, university, comments, ratings } = pending;
 
   const handleApprove = () => {
-    approvePending(pending);
+    approvePending(pending, true);
   };
 
   const handleDelete = () => {

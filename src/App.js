@@ -14,6 +14,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Tachyons from "tachyons";
 
+const BASE_URL = "http://localhost:3000";
+
 const particlesOptions = {
   particles: {
     color: {
@@ -62,18 +64,16 @@ function App() {
 
   // fetch data
   const fetchData = async () => {
-    const result = await axios("http://localhost:3000/home");
-    const res = await axios("http://localhost:3000/pending");
-    console.log(result);
-    setPendings(res.data);
-    setReviews(result.data);
+    const result = await axios(`${BASE_URL}/`);
+    setPendings(result.data.pending);
+    setReviews(result.data.review);
     console.log(reviews);
   };
 
   // update review after edit
   const putReview = (review) => {
     axios
-      .put("http://localhost:3000/updatereview", {
+      .put(`${BASE_URL}/updateReview`, {
         id: review.id,
         comments: review.comments,
         ratings: review.ratings,
@@ -90,9 +90,16 @@ function App() {
   };
 
   // send new professor to backend
-  const postReview = (review) => {
+  const postReview = (review, id, isAdmin = false) => {
+    review.id = id;
+
+    const tempComments = [review.comments];
+    const tempRatings = [parseInt(review.ratings)];
+    review.comments = tempComments;
+    review.ratings = tempRatings;
+
     axios
-      .post("http://localhost:3000/addprofessor", {
+      .post(`${BASE_URL}/addProfessor/${isAdmin}`, {
         id: review.id,
         name: review.name,
         university: review.university,
@@ -111,9 +118,26 @@ function App() {
   };
 
   const deleteReview = (review) => {
+    const { id } = review;
+    axios.get(`${BASE_URL}/deleteReview/${id}`, {}).then(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    fetchData();
+  };
+
+  const approvePending = (pending, isAdmin = true) => {
     axios
-      .get("http://localhost:3000/deleteprofessor/:id", {
-        id: review.id,
+      .post(`${BASE_URL}/addProfessor/${isAdmin}`, {
+        id: pending.id,
+        name: pending.name,
+        university: pending.university,
+        comments: pending.comments,
+        ratings: pending.ratings,
       })
       .then(
         (res) => {
@@ -123,16 +147,13 @@ function App() {
           console.log(err);
         }
       );
+    deletePending(pending);
     fetchData();
   };
 
-  const approvePending = (pending) => {
-    postReview(pending);
-    deletePending(pending);
-  };
-
   const deletePending = (pending) => {
-    axios.get(`http://localhost:3000/deletePending/${pending.id}`, {}).then(
+    const { id } = pending;
+    axios.get(`${BASE_URL}/deletePending/${id}`, {}).then(
       (res) => {
         console.log(res);
       },
@@ -145,16 +166,7 @@ function App() {
 
   // --------------------------------------------------------------------------
 
-  const addReview = (review) => {
-    const tempComments = [review.comments];
-    const tempRatings = [parseInt(review.ratings)];
-    review.comments = tempComments;
-    review.ratings = tempRatings;
-    setPendings([review, ...pendings]);
-  };
-
   const removeReview = (review) => {
-    setReviews(reviews.filter((rev) => rev.id != review.id));
     deleteReview(review);
   };
 
@@ -208,7 +220,7 @@ function App() {
                 cancelEdit={cancelEdit}
               />
             ) : null}
-            <AddForm addReview={addReview} />
+            <AddForm postReview={postReview} />
             <List
               reviews={reviews}
               removeReview={removeReview}

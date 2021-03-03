@@ -5,7 +5,7 @@ import { univData } from "../../util/us_institutions";
 import { Dropdown } from "semantic-ui-react";
 import "./AddForm.css";
 
-function AddForm({ addReview, searchUniv, univList }) {
+function AddForm({ postReview, searchUniv, univList, user }) {
   const [review, setReview] = useState({
     id: "",
     name: "",
@@ -41,7 +41,7 @@ function AddForm({ addReview, searchUniv, univList }) {
         review.university = "Others";
       }
 
-      addReview({ ...review, id: uuidv4() });
+      postReview(review, uuidv4(), false);
 
       setReview({
         ...review,
@@ -98,12 +98,13 @@ function AddForm({ addReview, searchUniv, univList }) {
               <option value="" defaultValue disabled>
                 Pick a university...
               </option>
-              {univData.map((univ, index) => (
+              <option value="Others">Others</option>
+              {/* {univData.map((univ, index) => (
                 <option key={index} value={univ.institution}>
                   {univ.institution}
                 </option>
               ))}
-              <option value="Others">Others</option>
+              <option value="Others">Others</option> */}
             </select>
 
             <input

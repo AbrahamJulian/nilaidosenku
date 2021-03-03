@@ -18,7 +18,7 @@ function Review({ review, deleteReview, editReview }) {
   rate = rate.toFixed(1);
 
   const handleDelete = () => {
-    deleteReview(id);
+    deleteReview(review);
   };
 
   const handleEdit = () => {
